@@ -1,0 +1,18 @@
+A barebones library to use n20 motors with encoders as stepper motors. 
+
+
+Tested with:
+____________________________________________________________________________
+
+* N20 motor with encoder 12V 60RPM
+  https://robu.in/product/n20-12v-60rpm-micro-metal-gear-motor-with-encoder/
+
+* TA6586 based motor driver
+  https://robu.in/product/n20-12v-60rpm-micro-metal-gear-motor-with-encoder/
+
+
+Credits:
+____________________________________________________________________________
+
+* Curious Scientist: For core logic of the n20 encoder
+  https://curiousscientist.tech/blog/positioning-with-the-n20-miniature-geared-dc-motors
