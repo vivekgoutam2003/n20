@@ -53,6 +53,7 @@ void n20_init(struct n20 *motor){
 		motor->tfunc = n20_stop;
 		motor->args = motor;
 	}
+	n20_stop(motor);
 }
 
 void n20_moverel(struct n20 *motor, int16_t step){
