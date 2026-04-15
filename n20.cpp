@@ -20,7 +20,9 @@
 
 #include <Arduino.h>
 #include <YetAnotherPcInt.h>
+extern "C"{
 #include "n20.h"
+}
 
 void n20_stop(struct n20 *motor){
 	digitalWrite(motor->m1, HIGH);
@@ -29,8 +31,8 @@ void n20_stop(struct n20 *motor){
 }
 
 //Credits: https://curiousscientist.tech/blog/positioning-with-the-n20-miniature-geared-dc-motors
-void n20_encoder_isr(struct n20 *a){
-	int e1curr = digitalRead(a->e1);
+void n20_encoder_isr(struct n20 *a, bool state){
+	int e1curr = state;
 	if(e1curr != a->e1prev && e1curr == 1){
 		if(digitalRead(a->e2) != e1curr)
 			a->val--;
@@ -60,23 +62,31 @@ void n20_moverel(struct n20 *motor, int16_t step){
 	n20_stop(motor);
 	motor->num = motor->val + step;
 	if(step > 0){
-		analogWrite(motor->m2, motor->speed);
 		analogWrite(motor->m1, 0);
+		analogWrite(motor->m2, motor->speed);
 		motor->busy = true;
 	}
 	else if(step < 0){
-		analogWrite(motor->m1, motor->speed);
 		analogWrite(motor->m2, 0);
+		analogWrite(motor->m1, motor->speed);
 		motor->busy = true;
 	}
 }
 
-
-
 void n20_moveabs(struct n20 *motor, int16_t step){
 	n20_stop(motor);
-	n20_moverel(motor, step - motor->val);
-}	
+	motor->num = step;
+	if(step > motor->val){
+		analogWrite(motor->m1, 0);
+		analogWrite(motor->m2, motor->speed);
+		motor->busy = true;
+	}
+	else if(step < motor->val){
+		analogWrite(motor->m2, 0);
+		analogWrite(motor->m1, motor->speed);
+		motor->busy = true;
+	}
+}
 
 void n20_setspeed(struct n20 *motor, uint8_t speed){
 	motor->speed = speed;

@@ -23,6 +23,8 @@
 #ifndef N20_H
 #define N20_H
 
+#include <stdbool.h>
+
 struct n20{
 	uint8_t m1; 			//Motor driver pin M1 (pwm)
 	uint8_t m2; 			//Motor driver pin M2 (pwm)
@@ -52,7 +54,7 @@ struct n20{
 	n20_moveabs(MOTOR, (float)ANGLE/N20_TURN_DENOMINATOR);
 
 //Updates encoder value
-void n20_encoder_isr(struct n20 *a);
+void n20_encoder_isr(struct n20 *a, bool state);
 
 //Turn x steps relative to current position
 void n20_moverel(struct n20 *motor, int16_t step);
